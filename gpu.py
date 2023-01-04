@@ -6,7 +6,6 @@ af2_data = ''
 path_fasta = ''
 path_out = ''
 path_log = ''
-af2_data = ''
 
 logname = 'logfile'
 max_template_date = '2022-03-10'
