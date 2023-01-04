@@ -16,7 +16,7 @@ gpu_2 = '' # gpu for the second task
 
 # 2 parameters for monomer and multimer
 # 'monomer_ptm' & 'model_1,model_2,model_3,model_4,model_5' 
-# 'multimer' &'model_1_multimer,model_2_multimer,model_3_multimer,model_4_multimer,model_5_multimer'
+# 'multimer' & 'model_1_multimer,model_2_multimer,model_3_multimer,model_4_multimer,model_5_multimer'
 parameter_1 = ''
 parameter_2 = ''
 
@@ -30,7 +30,7 @@ def divide_chunks(l, n):
         yield l[i:i + n] 
 
 def parallelfold_gpu(f,n):
-    script = ['bash',af2_script,
+    script = ['bash',af2_script+'run_alphafold.sh',
               '-d',af2_data,
               '-o',path_out,
               '-p',parameter_1,
