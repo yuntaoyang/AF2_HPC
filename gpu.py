@@ -1,75 +1,90 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-af2_script = ''
-af2_data = ''
-path_fasta = ''
-path_out = ''
-path_log = ''
-af2_data = ''
+# Run 2 AF2 jobs in parallel
+# --s: the directory of AF2 script
+# --d: the directory of AF2 data
+# --m: monomer or multimer
+# --t: max template date
+# --u1: gpu for the first job 
+# --u2: gpu for the second job
 
-logname = 'logfile'
-max_template_date = '2022-03-10'
-file_name = '' # a csv file with a column for file name and a column for length
-n_tasks =  # number of tasks in parallel (1 or 2)
-gpu_1 = '' # gpu for the first task
-gpu_2 = '' # gpu for the second task
-
-# 2 parameters for monomer and multimer
-# 'monomer_ptm' & 'model_1,model_2,model_3,model_4,model_5' 
-# 'multimer' &'model_1_multimer,model_2_multimer,model_3_multimer,model_4_multimer,model_5_multimer'
-parameter_1 = ''
-parameter_2 = ''
-
-import subprocess
 import os
+import argparse
 import logging
+import subprocess
 import pandas as pd
+
+def script(file,arg_s,arg_d,p,arg_t,m,u):
+    script = ['bash',os.path.join(arg_s,'run_alphafold.sh'),
+              '-d',arg_d,
+              '-o','./out/',
+              '-p',p,
+              '-i',os.path.join('./fasta/',file),
+              '-t',arg_t,
+              '-m',m,
+              '-u',u,'>',
+              os.path.join('./log_gpu/',file.replace('.fasta','.log')),'2>&1']
+    return ' '.join(script)
 
 def divide_chunks(l, n):    
     for i in range(0, len(l), n): 
         yield l[i:i + n] 
+        
+def get_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--s', required=True)
+    parser.add_argument('--d', required=True)
+    parser.add_argument('--m', required=True)
+    parser.add_argument('--t', required=True)
+    parser.add_argument('--u1', required=True)
+    parser.add_argument('--u2', required=True)
+    return parser
 
-def parallelfold_gpu(f,n):
-    script = ['bash',af2_script,
-              '-d',af2_data,
-              '-o',path_out,
-              '-p',parameter_1,
-              '-m',parameter_2,
-              '-i',path_fasta+f+'.fasta',
-              '-t',max_template_date,
-              '-u',n,
-              '>',path_log+f+'.log'+' '+'2>&1']
-    return ' '.join(script)
-
-if __name__ == "__main__":
+def main():
+    # Set up parameters
+    parser = get_parser()
+    args = parser.parse_args()
+    arg_s = args.s
+    arg_d = args.d
+    arg_m = args.m
+    arg_t = args.t
+    arg_u1 = args.u1
+    arg_u2 = args.u2
+    if arg_m == 'monomer':
+        m = 'model_1,model_2,model_3,model_4,model_5'
+        p = 'monomer_ptm'
+    if arg_m == 'multimer':
+        m = 'model_1_multimer,model_2_multimer,model_3_multimer,model_4_multimer,model_5_multimer'
+        p = 'multimer'
     # define logfile
+    logname = 'log_parafold'
     logging.basicConfig(level=logging.DEBUG, 
                         filename=logname, 
                         filemode="a",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
     logger = logging.getLogger(__name__)
-    logger.info("parallelfold start!")
-    
-    # directory for log files
-    if not os.path.exists(path_log):
-        os.mkdir(path_log)
-        
-    # divide jobs into chunks
-    job = pd.read_csv(file_name)
-    files_chunk = list(divide_chunks(job['file'].tolist(), n_tasks))
-    
-    # run af2
+    logger.info("ParaFold Start!")
+    # Create directory for log
+    if not os.path.exists('./log_gpu/'):
+        os.mkdir('./log_gpu/')
+    # Divide files in chunks
+    df = pd.read_csv('jobs.csv')
+    df = df.sort_values(by=['length'])
+    files_chunk = list(divide_chunks(df['file'].tolist(), 2))
+    # Run ParaFold
     for files in files_chunk:
         commands = []
         if len(files) == 2:
-            commands.append(parallelfold_gpu(files[0],gpu_1))
-            commands.append(parallelfold_gpu(files[1],gpu_2))
+            commands.append(script(files[0],arg_s,arg_d,p,arg_t,m,arg_u1))
+            commands.append(script(files[1],arg_s,arg_d,p,arg_t,m,arg_u2))
         else:
-            commands.append(parallelfold_gpu(files[0],gpu_1))
-        procs = [subprocess.Popen(i,shell=True,cwd=af2_script,
-                                  stdout=subprocess.PIPE,stderr=subprocess.STDOUT) for i in commands]
-        for p in procs:
-            p.communicate()
+            commands.append(script(files[0],arg_s,arg_d,p,arg_t,m,arg_u1))
+        procs = [subprocess.Popen(i,shell=True) for i in commands]
+        for proc in procs:
+            proc.communicate()
         for file in files:
             logger.info(file+" is done!")
+            
+if __name__ == "__main__":
+    main()    
