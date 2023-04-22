@@ -17,3 +17,8 @@ Run the GPU part in a GPU server.
 * --u2: gpu for the second job
 ## structure.py
 Collect structural files and record AF2 errors.
+## interface_residues.py
+Identify residues in the interface of different chains.
+* --file: the name of the pdb file
+* --a: the ID of the first chain (A)
+* --b: the ID of the second chain (B)
