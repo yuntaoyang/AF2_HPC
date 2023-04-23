@@ -16,7 +16,7 @@ def main():
             shutil.copy2(os.path.join('./out/',folder,'ranked_0.pdb'),'./pdb/')
             os.rename(os.path.join('./pdb/','ranked_0.pdb'),os.path.join('./pdb/',folder+'.pdb'))
         else:
-            f.write('Error: '+folder)
+            f.write('Error: '+folder+'\n')
     f.close()
     
 if __name__ == "__main__":
