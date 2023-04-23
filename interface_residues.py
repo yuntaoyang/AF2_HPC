@@ -152,7 +152,7 @@ def main():
         os.makedirs('./interface/')
     # Run the interfaceResidues function
     interface_residues = load('./pdb/',file,chain_a,chain_b)
-    interface_residues.to_csv(os.path.join('./interface/',file.replace('.pdb','.csv')),index=False)
+    interface_residues.to_csv(os.path.join('./interface/',file.replace('.pdb','_'+chain_a+'_'+chain_b+'.csv')),index=False)
 
 if __name__ == "__main__":
     main()    
