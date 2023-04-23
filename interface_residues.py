@@ -125,7 +125,10 @@ def load(path_pdb,file,chain_a,chain_b):
     position = []
     dASA = []
     for i in foundResidues:
-        chain.append(i[0][2:])
+        if i[0][2:] == 'A':
+            chain.append(chain_a)
+        else:
+            chain.append(chain_b)
         position.append(i[1])
         dASA.append(i[2])
     df = pd.DataFrame({'chain':chain,
