@@ -17,6 +17,8 @@ Run the GPU part in a GPU server.
 * --u2: gpu for the second job
 ## structure.py
 Collect structural files and record AF2 errors.
+## plddt.py
+Generate pLDDT confidence scores from AF2 predictions.
 ## interface_residues.py
 Identify residues in the interface of different chains.
 * --file: the name of the pdb file
