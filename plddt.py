@@ -41,8 +41,11 @@ def main():
         os.makedirs('./plddt/')
     # Run the interfaceResidues function
     for file in os.listdir('./out/'):
-        plddt = pLDDT(file,find_model(file),seq_len(file))
-        plddt.to_csv(os.path.join('./plddt/',file+'.csv'),index=False)
+        try:
+            plddt = pLDDT(file,find_model(file),seq_len(file))
+            plddt.to_csv(os.path.join('./plddt/',file+'.csv'),index=False)
+        except:
+            print('AF2 error: '+file)
 
 if __name__ == "__main__":
     main()    
