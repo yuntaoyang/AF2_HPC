@@ -24,3 +24,5 @@ Identify residues in the interface of different chains.
 * --file: the name of the pdb file
 * --a: the ID of the first chain (A)
 * --b: the ID of the second chain (B)
+## features.py
+Generate structural features (secondary structures and relative ASA) from AF2 predictions.
