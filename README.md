@@ -4,6 +4,11 @@
 * A collection of scripts to extract structural fetaures from AF2-predicted structures.
 * **Reference**: Yang, Y., Li, Z., Shih, D. J., & Zheng, W. J. (2022). AlphaFold 2 Monomer: Deployment in an HPC Environment.
 ## Implementation of the AlphaFold 2 Workflow
+### Set up the AF2 environment
+```
+conda env create -f environment.yml
+conda activate af2
+```
 ### The CPU part & Texas Advanced Computing Center
 1. Place FASTA files in the respective directories. You can find example FASTA files under:
 * Monomers: `./test_data/monomer_fasta`
