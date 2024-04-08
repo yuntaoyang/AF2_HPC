@@ -48,7 +48,19 @@ python workflow/gpu.py --af2_model multimer --af2_data ./af2_data --fasta_dir ./
 ### Copy and rename the AF2-predicted structure with the highest pLDDT scores
 1. Run the following command that takes the output of AF2 predictions `./out` as input.
 ```
-python features/pdb.py --out_dir test_data/multimer_out/ --pdb_dir test_data/multimer_pdb
+python features/pdb.py --out_dir test_data/out/ --pdb_dir test_data/pdb
 ```
 2. `./test_data/pdb` includes all the AF2-predicted PDB files.
 3. `./test_data/error.log` includes all the missiing PDB files caused by the AF2 errors.
+### Extract pLDDT scores from AlphaFold2 predictions.
+1. Run the following command that takes the output of AF2 predictions `./out` and fasta files  `./fasta` as input.
+```
+python features/plddt.py --out_dir test_data/out/ --fasta_dir test_data/fasta/ --plddt_dir test_data/plddt
+```
+2. `./test_data/plddt` includes pLDDTs of the AF2-predicted PDB files.
+### Extract secondary sturctures and relative ASA from the AF2 predicted structures.
+1. Run the following command that takes the output of AF2-predicted structures `./pdb` as input.
+```
+python features/dssp.py --pdb_dir test_data/pdb/ --dssp_dir test_data/dssp
+```
+2. `./test_data/dssp` includes secondary sturctures and relative ASA of the AF2-predicted PDB files.
