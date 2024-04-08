@@ -45,3 +45,10 @@ python workflow/gpu.py --af2_model multimer --af2_data ./af2_data --fasta_dir ./
 5. Ensure the **--af2_data** argument points to the correct AF2 data directory located at the GPU server in UTHealth Houston.
 6. The GPU part generates AF2-predicted structures in `./out` directory  and log files `./log_gpu` directory.
 ## Extraction of structural features from AF2-predicted structures
+### Copy and rename the AF2-predicted structure with the highest pLDDT scores
+1. Run the following command that takes the output of AF2 predictions `./out` as input.
+```
+python features/pdb.py --out_dir test_data/multimer_out/ --pdb_dir test_data/multimer_pdb
+```
+2. `./test_data/pdb` includes all the AF2-predicted PDB files.
+3. `./test_data/error.log` includes all the missiing PDB files caused by the AF2 errors.
