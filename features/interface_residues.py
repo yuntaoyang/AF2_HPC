@@ -81,8 +81,9 @@ def interfaceResidues(cmpx, cA='c. A', cB='c. B', cutoff=1.0, selName="interface
 	return rVal
 
 def load(file, chain_a, chain_b):
-    cmd.load(file, os.path.basename(file))
-    foundResidues = interfaceResidues(file, cA="c. "+chain_a, cB="c. "+chain_b, cutoff=0.75)
+    object_name = os.path.basename(file)
+    cmd.load(file, object_name)
+    foundResidues = interfaceResidues(object_name, cA="c. "+chain_a, cB="c. "+chain_b, cutoff=0.75)
     chain = []
     position = []
     dASA = []
