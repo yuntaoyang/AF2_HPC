@@ -64,3 +64,9 @@ python features/plddt.py --out_dir test_data/out/ --fasta_dir test_data/fasta/ -
 python features/dssp.py --pdb_dir test_data/pdb/ --dssp_dir test_data/dssp
 ```
 2. `./test_data/dssp` includes secondary sturctures and relative ASA of the AF2-predicted PDB files.
+### Finds interface residues between two chains in a complex.
+1. Run the following command that takes the PDB file of the protein complex as input.
+```
+python features/interface_residues.py --pdb_dir test_data/interface_residue/test.pdb --interface_dir test_data/interface_residue/test.csv --chain1 A --chain2 B
+```
+2. `./test_data/interface_residue/test.csv` includes interface resiudes between chain A and chain B.

@@ -61,11 +61,9 @@ def main():
     for files in files_chunk:
         commands = [build_script(args.af2_model, args.af2_data, args.fasta_dir, file, args.max_template_date, args.gpu1 if i == 0 else args.gpu2)
                     for i, file in enumerate(files)]
-        print(commands[0])
-        print(commands[1])
-        # procs = [subprocess.Popen(cmd, shell=True, executable='/bin/bash') for cmd in commands]
-        # for proc in procs:
-        #     proc.wait()
+        procs = [subprocess.Popen(cmd, shell=True, executable='/bin/bash') for cmd in commands]
+        for proc in procs:
+            proc.wait()
 
 if __name__ == "__main__":
     main()
